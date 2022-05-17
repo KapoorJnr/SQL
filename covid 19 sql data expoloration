@@ -1,0 +1,290 @@
+SELECT  FROM `portfolio-349807.Covid_data.covid_death`
+
+SELECT *  FROM Covid_data.covid_death
+WHERE continent is null
+
+___THE QUERY BELOW SHOWS THE COUNTRY, DATE, NEW CASES, TOTAL CASES DEATH AND POPULATION OF EACH COUNTRY
+SELECT Location, date, new_cases,total_cases, total_deaths,population
+FROM Covid_data.covid_deathORDER BY 1, 2
+
+
+THE QUERY BELOW SHOWS THE YEARS CONTAINED IN THIS DATASET
+SELECT DISTINCT EXTRACT (YEAR FROM DATE) AS YEAR
+FROM Covid_data.covid_death
+
+
+....THE QUERY BELOW SHOWS THE NUMBER OF ROWS CONTAINED IN THE DATA SET
+SELECT count(*)
+FROM Covid_data.covid_death
+
+
+___THE QUERY BELOW SHOWS ALL THE CONTINENT IN THE DATASET
+SELECT Distinct(continent)
+FROM Covid_data.covid_deathwhere continent is not null
+
+
+___THE QUERY BELOW SHOWS THE CONTINENTS AND ALL THE COUNTRIES IN EACH CONTINENT 
+SELECT Distinct(continent) ,COUNT(distinct Location) AS no_of_countries
+FROM Covid_data.covid_death
+WHERE continent is not null
+GROUP BY continent
+ORDER BY no_of_countries DESC
+
+
+
+___THE QUERY BELOW SHOWS THE TOTAL NUMBER OF CONTINENT AND TOTAL NUMBER OF COUNTRIES.
+SELECT COUNT(Distinct continent)AS totalno_of_continent ,COUNT(distinct Location) AS totalno_of_countries
+FROM Covid_data.covid_death
+WHERE continent is not null
+
+
+
+___THE QUERY BELOW  SHOWS EACH COUNTRY IN THE DATA SET
+SELECT Distinct(location) AS Country
+FROM Covid_data.covid_death
+WHERE continent is not null
+
+
+
+___THIS QUERY BELOW SHOWS HOW MANY TIMES EACH COUNTRY APPEARED IN THE DATA SET
+SELECT Distinct(Location) AS COUNTRY, COUNT( Location) As Count_of_countries
+FROM Covid_data.covid_death
+where continent is not null
+Group by location
+ORDER BY Count_of_countries DESC
+
+
+
+___THE QUERY BELOW SHOWS ROLLOVER OF TOTAL CASES, NEW_CASES AND TOTAL DEATHS IN EACH COUNTRY PER DAY FROM(2020-01-01 TO 2022-05-09 )
+SELECT Distinct Location,new_cases,total_cases AS Rollover_of_totalcases, total_deaths, date
+FROM Covid_data.covid_death
+WHERE  continent is not null
+ORDER BY date ASC
+
+
+
+___THE QUERY BELOW SHOWS THE ROLLOVER OF TOTAL CASES, NEW_CASES AND TOTAL DEATHS IN UK PER DAY(2020-01-31 TO 2022-05-09 )
+
+SELECT Distinct Location,new_cases,total_cases AS Rollover_of_totalcases, total_deaths, date
+FROM Covid_data.covid_death
+WHERE  continent is not null AND location = 'United Kingdom'
+ORDER BY date ASC
+
+
+
+___THE QUERY BELOW SHOWS THE PERCENTAGE(TOTAL CASES VS TOTAL DEATH) PER DAY (2020-01-01 TO 2022-05-09 )
+SELECT distinct Location, date, total_cases,new_cases, total_deaths,new_deaths,round(total_deaths/total_cases,3)*100 AS Death_percentage
+FROM Covid_data.covid_death
+WHERE  continent is not null 
+ORDER BY total_deaths desc
+
+
+
+___THE QUERY BELOW SHOWS THE PERCENTAGE(TOTAL CASES VS TOTAL DEATH) PER DAY (2020-01-01 TO 2022-05-09 ) IN UK
+SELECT distinct Location, date, total_cases,new_cases, total_deaths,new_deaths,round(total_deaths/total_cases,3)*100 AS Death_percentage
+FROM Covid_data.covid_death
+WHERE  continent is not null AND location = 'United Kingdom'
+ORDER BY total_deaths desc
+
+
+
+
+___The Query below  shows the country with the Highest covid death,highest covid cases and Percentage of people with covid that died PER COUNTRY
+
+SELECT distinct Location,max(total_cases) AS Maxtotalcases, max(total_deaths) AS maxtotaldeaths, Round(max(total_deaths)/max(total_cases),2)*100 AS Perctotalcasestodeath
+FROM Covid_data.covid_death
+WHERE  continent is not null Group by location
+ORDER BY maxtotaldeaths desc 
+
+
+
+
+___This shows the country with the Highest covid death,highest covid cases and Percentage of people with covid that died IN UK
+
+SELECT distinct Location,max(total_cases) AS Maxtotalcases, max(total_deaths) AS maxtotaldeaths, Round(max(total_deaths)/max(total_cases),2)*100 AS Perctotalcasestodeath
+FROM Covid_data.covid_death
+WHERE  continent is not null AND  location = 'United Kingdom'
+Group by location
+ORDER BY maxtotaldeaths desc 
+
+
+
+___THE QUERY BELOW SHOWS THE POPULATION OF EACH COUNTRY IN THE DATA SET
+SELECT distinct Location, population
+FROM Covid_data.covid_death
+WHERE Continent is not null
+ORDER BY population DESC
+
+
+
+___THE QUERY BELOW SHOWS THE TOTAL CASE, NEW CASE,TOTAL DEATH, NEW DEATH AND POPULATION OF EACH COUNTRY PER DAY
+SELECT Location,date, total_cases, new_cases,total_deaths,new_deaths ,population
+FROM Covid_data.covid_death
+WHERE continent is not null
+ORDER BY 1, 2
+
+
+
+___THE QUERY BELOW SHOWS THE TOTAL CASE, NEW CASE,TOTAL DEATH, NEW DEATH AND POPULATION OF UK PER DAY
+SELECT Location,date, total_cases , new_cases ,total_deaths,new_deaths AS Rollover_of_newdeaths,population
+FROM Covid_data.covid_death
+WHERE continent is not null AND  location = 'United Kingdom'
+ORDER BY 1, 2
+
+
+
+___THE QUERY BELOW  SHOWS THE ROLLOVER OF (TOTAL CASE,NEW CASE,TOTAL DEATH, NEW DEATH AND POPULATION) OF EACH COUNTRY
+
+SELECT Location, max(total_cases) AS Rollover_of_totalcases, max(new_cases)AS Rollover_of_newcase,
+max(total_deaths) AS Rollover_of_totaldeath,max(new_deaths) AS Rollover_of_newdeaths,population
+FROM Covid_data.covid_death
+WHERE continent is not null
+Group by Location, Population
+ORDER BY 1, 2
+
+
+
+___THE QUERY BELOW SHOWS THE PERCENTAGE TOTAL CASES VS TOTAL POPULATION  FOR EACH COUNTRY
+SELECT Location, max(total_cases) AS Rollover_of_totalcases,population,Round(max(total_cases)/population,2)*100 AS Percofcasestopop
+FROM Covid_data.covid_death
+WHERE continent is not null
+Group by Location, Population
+ORDER BY Percofcasestopop desc
+
+
+
+___THE QUERY BELOW SHOWS THE PERCENTAGE TOTAL CASES VS TOTAL POPULATION FOR UK
+SELECT Location, max(total_cases) AS Rollover_of_totalcases,population,Round(max(total_cases)/population,2)*100 AS Percofcasestopop
+FROM Covid_data.covid_death
+WHERE continent is not null AND  location = 'United Kingdom'
+Group by Location, Population
+
+
+
+
+___THE QUERY BELOW SHOWS THE NEW DEATH,TOTAL DEATH VS POPULATION PER DAY FOR EACH COUNTRY
+SELECT Location, date, new_deaths,total_deaths,population
+FROM Covid_data.covid_death
+WHERE Continent is not null
+ORDER BY date ASC
+
+
+
+______THE QUERY BELOW SHOWS THE NEW DEATH,TOTAL DEATH VS POPULATION PER DAY IN UK
+
+SELECT Location, date, new_deaths,total_deaths,population 
+FROM Covid_data.covid_death
+WHERE Continent is not null AND Location = 'United Kingdom'
+ORDER BY date ASC
+
+
+
+___THE QUERY BELOW SHOWS THE PERCENTAGE TOTAL DEATH VS POPULATION
+SELECT Location, max(total_deaths) AS Rollover_of_totaldeaths, population, Round(max(total_deaths/population),2)*100 AS percentagedeaths
+FROM Covid_data.covid_death 
+WHERE Continent is not null 
+GROUP BY Location, population
+ORDER BY Rollover_of_totaldeaths desc
+
+
+
+___THE QUERY BELOW SHOWS PERCENTAGE TOTAL DEATH VS POPULATION IN UNITED KINGDOM
+SELECT Location, max(total_deaths) AS Rollover_of_totaldeaths, population, Round(max(total_deaths/population),5)*100 AS percentagedeaths
+FROM Covid_data.covid_death 
+WHERE Continent is not null AND Location = 'United Kingdom'
+GROUP BY Location, population
+ORDER BY Rollover_of_totaldeaths DESC
+
+
+
+
+
+__THE QUERY BELOW SHOWS THE COUNTRIES WITH  THE HIGHEST COUNT OF NEW CASES COMPARED TO POPULATION AND THE PERCENTAGE 
+SELECT location, population, max(new_cases) AS maxnumberofnewcases , (max(new_cases)/population)*100 AS percmaxofnewcases
+FROM Covid_data.covid_death
+WHERE continent is not null
+Group by location, population
+ORDER BY maxnumberofnewcases DESC
+
+
+
+___THE QUERY BELOW SHOWS THE BREAKDOWN OF TOTAL DEATH AND TOTAL CASES BY CONTINENT
+select distinct continent, max(total_deaths) AS maxoftotaldeath, max(total_cases) AS maxoftotalcases
+FROM Covid_data.covid_death
+where continent is not null
+GROUP BY continent
+order by maxoftotaldeath DESC
+
+
+
+___THE QUERY BELOW SHOWS THE PERCENTAGE BREAKDOWN OF TOTAL DEATH, TOTAL CASES BY CONTINENT
+SELECT distinct continent, population, max(total_deaths) AS maxoftotaldeath, max(total_cases) AS maxoftotalcases, 
+round(max(total_deaths)/population,2)*100 AS percdeathbycontinent,round(max(total_cases)/population,2)*100 AS perccasesbycontinent
+FROM Covid_data.covid_death
+where continent is not null
+GROUP BY continent, population
+ORDER BY maxoftotaldeath DESC
+
+
+
+
+
+____THE QUERY BELOW SHOWS THE GLOBAL NUMBERS(SUM OF NEW CASES,NEW DEATH AND PERCENTAGE  ) PER DAY
+this shows the death percentage from new cases  per day 
+
+SELECT date,sum(new_cases) AS totcasesperday,sum(new_deaths) AS totdeathperday,(sum(new_deaths)/sum(new_cases))*100 AS deathpercperday
+FROM Covid_data.covid_death
+WHERE continent is not null
+GROUP BY date
+ORDER BY date DESC
+
+
+
+
+THE QUERY BELOW SHOWS THE NUMBER OF PEOPLE THAT HAVE BEEN VACCINATED IN EACH CONTINENT
+
+SELECT distinct continent, max(total_vaccinations) AS VACCINATED
+FROM Covid_data.covid_vaccination
+WHERE continent is not null
+GROUP BY continent
+
+
+
+
+___THE QUERY BELOW SHOWS THE INNER JOIN OF BOTH TABLES (COVID DEATH AND COVID VACCINATION) 
+SELECT *
+FROM Covid_data.covid_death AS DEATH 
+JOIN Covid_data.covid_vaccination AS vaccination ON death.location=vaccination.location 
+WHERE death.continent is not null
+order by death.date
+
+
+
+THE QUERY BELOW  SHOWS THE TOTAL DEATH, TOTAL CASES, AND TOTAL NUMBER OF PEOPLE VACCINATED IN EACH CONTINENT 
+
+SELECT distinct death.continent,max(death.total_cases) AS rollovercases, max(death.total_deaths)AS Rolloverdeath,
+max(vaccination.total_vaccinations) AS Rollovervaccination
+FROM Covid_data.covid_death AS DEATH 
+JOIN Covid_data.covid_vaccination AS vaccination ON death.location=vaccination.location 
+WHERE death.continent is not null
+GROUP BY death.continent
+
+
+
+
+____THE QUERY BELOW SHOWS THE ROLLOVER TOTAL VACCINATION VS POPULATION PER DAY FOR EACH COUNTRY  USING OVER/PARTITION STATEMENT 
+
+SELECT death.population,death.location,death.date,death.continent,vaccination.new_vaccinations,sum(vaccination.new_vaccinations) OVER(PARTITION BY death.location order by death.location,death.date)AS Turnover_newvaccination
+FROM Covid_data.covid_death AS DEATH 
+JOIN Covid_data.covid_vaccination AS vaccination ON death.location=vaccination.location AND death.date=vaccination.date
+WHERE death.continent is not null  
+
+
+
+
+
+
+
+
+
+
